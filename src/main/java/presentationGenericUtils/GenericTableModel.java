@@ -20,23 +20,31 @@ public class GenericTableModel<T> extends DefaultTableModel {
 
     private final Class<T> type;
 
+
     public GenericTableModel(){
-//        this.type = (Class<T>) ((ParameterizedType) getClass().getConstructors()[0].getGenericParameterTypes()[0]).getActualTypeArguments()[0];
         this(new ArrayList<T>());
     }
 
     public GenericTableModel(List<T> modelData){
         this.type = (Class<T>) ((ParameterizedType) getClass().getConstructors()[0].getGenericParameterTypes()[0]).getActualTypeArguments()[0];
 
-        Object[][] modelDataObjects = getModelDataObjects(modelData);
-        String[] columnNames = getColumnNames();
-        super.setDataVector(modelDataObjects,columnNames);
+        setDataVector(modelData);
     }
+
 
     @Override
     public boolean isCellEditable(int row, int column){
         return false;
     }
+
+
+
+    public void setDataVector(List<T> modelData){
+        Object[][] modelDataObjects = getModelDataObjects(modelData);
+        String[] columnNames = getColumnNames();
+        super.setDataVector(modelDataObjects,columnNames);
+    }
+
 
 
     private Object[][] getModelDataObjects(List<T> modelData){

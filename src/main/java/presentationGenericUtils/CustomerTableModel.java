@@ -9,11 +9,7 @@ import java.util.List;
  */
 public class CustomerTableModel extends GenericTableModel<Customer> {
 
-    public CustomerTableModel(List<Customer> modelData) {
-        super(modelData);
-    }
-
-    public CustomerTableModel() {
+    public CustomerTableModel(){
         super();
     }
 }

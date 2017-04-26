@@ -9,11 +9,7 @@ import java.util.List;
  */
 public class WarehouseTableModel extends GenericTableModel<Product> {
 
-    public WarehouseTableModel(List<Product> modelData) {
-        super(modelData);
-    }
-
-    public WarehouseTableModel() {
+    public WarehouseTableModel(){
         super();
     }
 }

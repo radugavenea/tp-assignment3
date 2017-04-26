@@ -16,22 +16,19 @@ import java.util.List;
  */
 public class WarehouseView extends JFrame {
 
-    private List<Customer> customers = new ArrayList<Customer>();
-    private List<Product> products = new ArrayList<Product>();
-
     private JFrame frame = new JFrame("Warehouse Application");
 
 
     private JTabbedPane customerTabbedPane = new JTabbedPane();
 
-    private GenericTableModel customerTableModel = new CustomerTableModel(customers);
+    private GenericTableModel customerTableModel = new CustomerTableModel();
     private JTable customerTable = new JTable();
     private JScrollPane customerScrollPane = new JScrollPane(customerTable);
     private JPanel customerPanel = new JPanel();
     private JSplitPane customerSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, customerScrollPane, customerPanel);
 
 
-    private GenericTableModel warehouseTableModel = new WarehouseTableModel(products);
+    private GenericTableModel warehouseTableModel = new WarehouseTableModel();
     private JTable warehouseTable = new JTable();
     private JScrollPane warehouseScrollPane = new JScrollPane(warehouseTable);
     private JPanel warehousePanel = new JPanel();
@@ -60,6 +57,20 @@ public class WarehouseView extends JFrame {
         frame.setVisible(true);
     }
 
+    
+    public void updateCustomerTable(List<Customer> customers){
+        customerTableModel.setDataVector(customers);
+        customerTableModel.fireTableDataChanged();
+    }
+
+    public void updateProductTable(List<Product> products){
+        customerTableModel.setDataVector(products);
+        customerTableModel.fireTableDataChanged();
+    }
+
+
+
+    
     private void setUpCustomerPanel(){
         customerTable.setModel(customerTableModel);
         customerSplitPane.setDividerLocation(300);
@@ -72,14 +83,6 @@ public class WarehouseView extends JFrame {
 
 
 
-    public void updateCustomers(List<Customer> customers){
-        this.customers = customers;
-        customerTableModel.fireTableDataChanged();
-    }
 
-    public void updateProducts(List<Product> products){
-        this.products = products;
-        customerTableModel.fireTableDataChanged();
-    }
 
 }

@@ -1,7 +1,5 @@
 package model;
 
-import javax.swing.undo.CannotUndoException;
-import java.util.ArrayList;
 
 /**
  * Created by radu on 20.04.2017.
@@ -16,6 +14,8 @@ public class Customer {
         this.name = name;
         this.address = address;
     }
+
+    public Customer(){}
 
     public int getId() {
         return id;

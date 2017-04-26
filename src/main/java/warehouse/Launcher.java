@@ -1,6 +1,7 @@
 package warehouse;
 
 import connection.ConnectionUrl;
+import controllers.CustomerController;
 import dataAccessLayer.CustomerDAO;
 import dataAccessLayer.ProductDAO;
 import model.Customer;
@@ -21,7 +22,7 @@ public class Launcher {
 
     public static void main(String[] args) {
 
-        new WarehouseView();
+        new CustomerController(new WarehouseView());
 
 
     }
