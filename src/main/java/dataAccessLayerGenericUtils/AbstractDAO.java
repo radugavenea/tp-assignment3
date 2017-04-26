@@ -1,9 +1,6 @@
-package dataAccessLayer;
+package dataAccessLayerGenericUtils;
 
 import connection.ConnectionFactory;
-import connection.ConnectionUrl;
-import dataAccessLayerUtils.StatementGenerator;
-import dataAccessLayerUtils.QueryStringBuilder;
 
 import java.lang.reflect.ParameterizedType;
 import java.sql.*;
@@ -19,6 +16,7 @@ public class AbstractDAO<T> {
     private StatementGenerator statementGenerator;
     private String url;
 
+
     public AbstractDAO(String connectionUrl) {
         this.type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         queryBuilder = new QueryStringBuilder(type);
@@ -26,7 +24,12 @@ public class AbstractDAO<T> {
         url = connectionUrl;
     }
 
-
+    /**
+     * Gets entity from db based on id
+     * @param id
+     * @return
+     * @throws SQLException
+     */
     public T getById(int id) throws SQLException {
         String query = queryBuilder.createSelectByFieldQuery("id");
 
@@ -44,7 +47,11 @@ public class AbstractDAO<T> {
         return (list != null ? list.get(0) : null);
     }
 
-
+    /**
+     * Gets all the records from db
+     * @return
+     * @throws SQLException
+     */
     public List<T> getAll() throws SQLException {
         String query = queryBuilder.createSelectAllQuery();
 
@@ -61,6 +68,12 @@ public class AbstractDAO<T> {
         return list;
     }
 
+    /**
+     * Adds new record to the db
+     * @param instance
+     * @return
+     * @throws SQLException
+     */
     public int addNew(T instance) throws SQLException {
         String query = queryBuilder.createInsertQuery();
 
@@ -76,6 +89,12 @@ public class AbstractDAO<T> {
         return 0;
     }
 
+    /**
+     * Updates record from db
+     * @param instance
+     * @return
+     * @throws SQLException
+     */
     public int update(T instance) throws SQLException {
         String query = queryBuilder.createUpdateQuery();
 
@@ -91,6 +110,12 @@ public class AbstractDAO<T> {
         return 0;
     }
 
+    /**
+     * Deletes a record from db based on id
+     * @param id
+     * @return
+     * @throws SQLException
+     */
     public int deleteById(int id) throws SQLException {
         String query = queryBuilder.createDeleteByFieldQuery("id");
 

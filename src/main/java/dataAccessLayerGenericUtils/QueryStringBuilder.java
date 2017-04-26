@@ -1,4 +1,4 @@
-package dataAccessLayerUtils;
+package dataAccessLayerGenericUtils;
 
 import java.lang.reflect.Field;
 

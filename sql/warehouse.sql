@@ -8,21 +8,21 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema warehouse_test
+-- Schema warehouse
 -- -----------------------------------------------------
 
-DROP SCHEMA IF EXISTS `warehouse_test`; 
+DROP SCHEMA IF EXISTS `warehouse`; 
 
 -- -----------------------------------------------------
--- Schema warehouse_test
+-- Schema warehouse
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `warehouse_test` DEFAULT CHARACTER SET utf8 ;
-USE `warehouse_test` ;
+CREATE SCHEMA IF NOT EXISTS `warehouse` DEFAULT CHARACTER SET utf8 ;
+USE `warehouse` ;
 
 -- -----------------------------------------------------
--- Table `warehouse_test`.`customer`
+-- Table `warehouse`.`customer`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `warehouse_test`.`customer` (
+CREATE TABLE IF NOT EXISTS `warehouse`.`customer` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NULL,
   `address` VARCHAR(255) NULL,
@@ -31,9 +31,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `warehouse_test`.`product`
+-- Table `warehouse`.`product`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `warehouse_test`.`product` (
+CREATE TABLE IF NOT EXISTS `warehouse`.`product` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NULL,
   `stock` INT NULL,
@@ -43,9 +43,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `warehouse_test`.`order`
+-- Table `warehouse`.`order`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `warehouse_test`.`order` (
+CREATE TABLE IF NOT EXISTS `warehouse`.`order` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `order_number` VARCHAR(45) NULL,
   `customer_id` INT NOT NULL,
@@ -53,16 +53,16 @@ CREATE TABLE IF NOT EXISTS `warehouse_test`.`order` (
   INDEX `fk_order_customer1_idx` (`customer_id` ASC),
   CONSTRAINT `fk_order_customer1`
     FOREIGN KEY (`customer_id`)
-    REFERENCES `warehouse_test`.`customer` (`id`)
+    REFERENCES `warehouse`.`customer` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `warehouse_test`.`order_product`
+-- Table `warehouse`.`order_product`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `warehouse_test`.`order_product` (
+CREATE TABLE IF NOT EXISTS `warehouse`.`order_product` (
   `order_id` INT NOT NULL,
   `product_id` INT NOT NULL,
   `quantity` VARCHAR(45) NULL,
@@ -71,12 +71,12 @@ CREATE TABLE IF NOT EXISTS `warehouse_test`.`order_product` (
   INDEX `fk_order_has_product_order_idx` (`order_id` ASC),
   CONSTRAINT `fk_order_has_product_order`
     FOREIGN KEY (`order_id`)
-    REFERENCES `warehouse_test`.`order` (`id`)
+    REFERENCES `warehouse`.`order` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_order_has_product_product1`
     FOREIGN KEY (`product_id`)
-    REFERENCES `warehouse_test`.`product` (`id`)
+    REFERENCES `warehouse`.`product` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -88,20 +88,20 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 
 
-INSERT INTO `warehouse_test`.`customer` (`id`, `name`, `address`) VALUES ('1', 'Mirel Zeama', 'Baritiu 26');
-INSERT INTO `warehouse_test`.`customer` (`id`, `name`, `address`) VALUES ('2', 'Petre Joaca-Bine', 'Baritiu 28');
-INSERT INTO `warehouse_test`.`customer` (`id`, `name`, `address`) VALUES ('3', 'Gigel Nu', 'Baritiu 26');
-INSERT INTO `warehouse_test`.`customer` (`id`, `name`, `address`) VALUES ('4', 'Petronela Da', 'la ea acasa');
-INSERT INTO `warehouse_test`.`customer` (`id`, `name`, `address`) VALUES ('5', 'Eugenia Bla', 'o adresa');
-INSERT INTO `warehouse_test`.`customer` (`id`, `name`, `address`) VALUES ('6', 'Georgica Buletin', 'Titulescu 29');
+INSERT INTO `warehouse`.`customer` (`id`, `name`, `address`) VALUES ('1', 'Mirel Zeama', 'Baritiu 26');
+INSERT INTO `warehouse`.`customer` (`id`, `name`, `address`) VALUES ('2', 'Petre Joaca-Bine', 'Baritiu 28');
+INSERT INTO `warehouse`.`customer` (`id`, `name`, `address`) VALUES ('3', 'Gigel Nu', 'Baritiu 26');
+INSERT INTO `warehouse`.`customer` (`id`, `name`, `address`) VALUES ('4', 'Petronela Da', 'la ea acasa');
+INSERT INTO `warehouse`.`customer` (`id`, `name`, `address`) VALUES ('5', 'Eugenia Bla', 'o adresa');
+INSERT INTO `warehouse`.`customer` (`id`, `name`, `address`) VALUES ('6', 'Georgica Buletin', 'Titulescu 29');
 
-INSERT INTO `warehouse_test`.`product` (`id`, `name`, `stock`, `price`) VALUES ('1', 'Moka Pot', '43', '54.95');
-INSERT INTO `warehouse_test`.`product` (`id`, `name`, `stock`, `price`) VALUES ('2', 'Aeropress', '23', '210');
-INSERT INTO `warehouse_test`.`product` (`id`, `name`, `stock`, `price`) VALUES ('3', 'Latiera', '98', '102.5');
-INSERT INTO `warehouse_test`.`product` (`id`, `name`, `stock`, `price`) VALUES ('4', 'V60', '123', '105');
-INSERT INTO `warehouse_test`.`product` (`id`, `name`, `stock`, `price`) VALUES ('5', 'Lingurita', '234', '5.5');
-INSERT INTO `warehouse_test`.`product` (`id`, `name`, `stock`, `price`) VALUES ('6', 'Rasnita cafea', '122', '82.5');
-INSERT INTO `warehouse_test`.`product` (`id`, `name`, `stock`, `price`) VALUES ('7', 'French Press', '222', '132.5');
+INSERT INTO `warehouse`.`product` (`id`, `name`, `stock`, `price`) VALUES ('1', 'Moka Pot', '43', '54.95');
+INSERT INTO `warehouse`.`product` (`id`, `name`, `stock`, `price`) VALUES ('2', 'Aeropress', '23', '210');
+INSERT INTO `warehouse`.`product` (`id`, `name`, `stock`, `price`) VALUES ('3', 'Latiera', '98', '102.5');
+INSERT INTO `warehouse`.`product` (`id`, `name`, `stock`, `price`) VALUES ('4', 'V60', '123', '105');
+INSERT INTO `warehouse`.`product` (`id`, `name`, `stock`, `price`) VALUES ('5', 'Lingurita', '234', '5.5');
+INSERT INTO `warehouse`.`product` (`id`, `name`, `stock`, `price`) VALUES ('6', 'Rasnita cafea', '122', '82.5');
+INSERT INTO `warehouse`.`product` (`id`, `name`, `stock`, `price`) VALUES ('7', 'French Press', '222', '132.5');
 
 
 

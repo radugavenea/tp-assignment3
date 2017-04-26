@@ -4,6 +4,7 @@ import connection.ConnectionUrl;
 import dataAccessLayer.CustomerDAO;
 import dataAccessLayer.ProductDAO;
 import model.Customer;
+import presentation.WarehouseView;
 
 import java.sql.SQLException;
 
@@ -16,28 +17,13 @@ public class Launcher {
     private static CustomerDAO customerDAO = new CustomerDAO(ConnectionUrl.warehouseDbUrl);
     private static ProductDAO productDAO = new ProductDAO(ConnectionUrl.warehouseDbUrl);
 
+//    static WarehouseView view = new WarehouseView();
+
     public static void main(String[] args) {
 
-
-        try {
-//            System.out.println(customerDAO.getById(0).getName());
-//            System.out.println(productDAO.getById(0).getName());
-
-            System.out.println("\n");
-
-//            System.out.println(customerDAO.getAll().get(0).getAddress());
-//            System.out.println(customerDAO.getAll().get(1).getAddress());
-//            System.out.println(productDAO.getAll());
+        new WarehouseView();
 
 
-            System.out.println("\n");
-
-            System.out.println(customerDAO.addNew(new Customer("cici","undeva in lume")));
-//            System.out.println(customerDAO.deleteById(2));
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
 }

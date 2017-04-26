@@ -1,5 +1,6 @@
 package dataAccessLayer;
 
+import dataAccessLayerGenericUtils.AbstractDAO;
 import model.Order;
 
 /**

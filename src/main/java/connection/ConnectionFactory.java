@@ -13,7 +13,7 @@ public class ConnectionFactory {
     private static final String password = "root";
 
     /**
-     * Get the connection to the database
+     * Gets the connection to the database
      * @param url
      * @return
      * @throws SQLException

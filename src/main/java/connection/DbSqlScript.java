@@ -47,7 +47,7 @@ public class DbSqlScript {
     }
 
     /**
-     * Creates a new db schema
+     * Creates a new db schema with specified name on localhost
      * @param schemaName
      */
     public static void createNewSchema(String schemaName){
