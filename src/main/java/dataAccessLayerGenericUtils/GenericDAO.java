@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by radu on 20.04.2017.
  */
-public class AbstractDAO<T> {
+public class GenericDAO<T> {
 
     private final Class<T> type;
     private QueryStringBuilder queryBuilder;
@@ -17,7 +17,7 @@ public class AbstractDAO<T> {
     private String url;
 
 
-    public AbstractDAO(String connectionUrl) {
+    public GenericDAO(String connectionUrl) {
         this.type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         queryBuilder = new QueryStringBuilder(type);
         statementGenerator = new StatementGenerator(type);

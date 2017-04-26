@@ -18,10 +18,10 @@ public class CustomerController {
     public CustomerController(WarehouseView view) {
         this.view = view;
 
-        dostuff();
+        doShitAndBeHappyTest();
     }
 
-    private void dostuff(){
+    private void doShitAndBeHappyTest(){
 
         CustomerDAO customerDAO = new CustomerDAO(ConnectionUrl.warehouseDbUrl);
         try {

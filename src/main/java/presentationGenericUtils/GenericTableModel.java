@@ -26,7 +26,8 @@ public class GenericTableModel<T> extends DefaultTableModel {
     }
 
     public GenericTableModel(List<T> modelData){
-        this.type = (Class<T>) ((ParameterizedType) getClass().getConstructors()[0].getGenericParameterTypes()[0]).getActualTypeArguments()[0];
+//        this.type = (Class<T>) ((ParameterizedType) getClass().getSuperclass().getConstructors()[1].getGenericParameterTypes()[0]).getActualTypeArguments()[0];
+        this.type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 
         setDataVector(modelData);
     }

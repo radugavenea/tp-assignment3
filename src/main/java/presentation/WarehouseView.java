@@ -8,7 +8,6 @@ import presentationGenericUtils.WarehouseTableModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,6 +38,7 @@ public class WarehouseView extends JFrame {
         initializeWarehouseView();
     }
 
+
     private void initializeWarehouseView(){
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -57,15 +57,16 @@ public class WarehouseView extends JFrame {
         frame.setVisible(true);
     }
 
-    
+
+
     public void updateCustomerTable(List<Customer> customers){
         customerTableModel.setDataVector(customers);
         customerTableModel.fireTableDataChanged();
     }
 
     public void updateProductTable(List<Product> products){
-        customerTableModel.setDataVector(products);
-        customerTableModel.fireTableDataChanged();
+        warehouseTableModel.setDataVector(products);
+        warehouseTableModel.fireTableDataChanged();
     }
 
 

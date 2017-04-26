@@ -2,7 +2,6 @@ package presentationGenericUtils;
 
 import model.Product;
 
-import java.util.List;
 
 /**
  * Created by radu on 26.04.2017.

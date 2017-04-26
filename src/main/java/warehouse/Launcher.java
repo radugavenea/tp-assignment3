@@ -2,6 +2,7 @@ package warehouse;
 
 import connection.ConnectionUrl;
 import controllers.CustomerController;
+import controllers.WarehouseController;
 import dataAccessLayer.CustomerDAO;
 import dataAccessLayer.ProductDAO;
 import model.Customer;
@@ -14,7 +15,7 @@ import java.sql.SQLException;
  */
 public class Launcher {
 
-//    private static AbstractDAO<Customer> customerDAO = new AbstractDAO<Customer>();       // asa nu merge
+//    private static GenericDAO<Customer> customerDAO = new GenericDAO<Customer>();       // asa nu merge
     private static CustomerDAO customerDAO = new CustomerDAO(ConnectionUrl.warehouseDbUrl);
     private static ProductDAO productDAO = new ProductDAO(ConnectionUrl.warehouseDbUrl);
 
@@ -22,7 +23,10 @@ public class Launcher {
 
     public static void main(String[] args) {
 
-        new CustomerController(new WarehouseView());
+        WarehouseView view = new WarehouseView();
+
+//        new CustomerController(view);
+        new WarehouseController(view);
 
 
     }
