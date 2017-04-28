@@ -28,8 +28,8 @@ public class OrderCRUDTests {
 
     @Test
     public void getOrderByIdTest() throws SQLException {
-        assert orderDAO.getById(1).getOrder_number().equals("756756");
-        assert orderDAO.getById(3).getCustomer_id() == 5;
+        assert orderDAO.getById(1).getOrderNumber().equals("756756");
+        assert orderDAO.getById(3).getCustomerId() == 5;
     }
 
     @Test
@@ -41,14 +41,14 @@ public class OrderCRUDTests {
 
     @Test
     public void updateOrderTest() throws SQLException {
-        assert orderDAO.getById(1).getOrder_number().equals("756756");
+        assert orderDAO.getById(1).getOrderNumber().equals("756756");
 
         OrderEntity orderEntity = orderDAO.getById(1);
-        orderEntity.setOrder_number("222");
+        orderEntity.setOrderNumber("222");
         orderDAO.update(orderEntity);
 
-        assert !orderDAO.getById(1).getOrder_number().equals("756756");
-        assert orderDAO.getById(1).getOrder_number().equals("222");
+        assert !orderDAO.getById(1).getOrderNumber().equals("756756");
+        assert orderDAO.getById(1).getOrderNumber().equals("222");
     }
 
     @Test

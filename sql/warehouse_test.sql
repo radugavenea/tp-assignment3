@@ -47,12 +47,12 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `warehouse_test`.`orderEntity` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `order_number` VARCHAR(45) NULL,
-  `customer_id` INT NOT NULL,
+  `orderNumber` VARCHAR(45) NULL,
+  `customerId` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_order_customer1_idx` (`customer_id` ASC),
+  INDEX `fk_order_customer1_idx` (`customerId` ASC),
   CONSTRAINT `fk_order_customer1`
-    FOREIGN KEY (`customer_id`)
+    FOREIGN KEY (`customerId`)
     REFERENCES `warehouse_test`.`customerEntity` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -60,22 +60,22 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `warehouse_test`.`orderproduct`
+-- Table `warehouse_test`.`orderProductEntity`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `warehouse_test`.`orderproduct` (
-  `order_id` INT NOT NULL,
-  `product_id` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `warehouse_test`.`orderProductEntity` (
+  `orderId` INT NOT NULL,
+  `productId` INT NOT NULL,
   `quantity` INT NULL,
-  PRIMARY KEY (`order_id`, `product_id`),
-  INDEX `fk_order_has_product_product1_idx` (`product_id` ASC),
-  INDEX `fk_order_has_product_order_idx` (`order_id` ASC),
+  PRIMARY KEY (`orderId`, `productId`),
+  INDEX `fk_order_has_product_product1_idx` (`productId` ASC),
+  INDEX `fk_order_has_product_order_idx` (`orderId` ASC),
   CONSTRAINT `fk_order_has_product_order`
-    FOREIGN KEY (`order_id`)
+    FOREIGN KEY (`orderId`)
     REFERENCES `warehouse_test`.`orderEntity` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_order_has_product_product1`
-    FOREIGN KEY (`product_id`)
+    FOREIGN KEY (`productId`)
     REFERENCES `warehouse_test`.`productEntity` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -103,9 +103,9 @@ INSERT INTO `warehouse_test`.`productEntity` (`id`, `name`, `stock`, `price`) VA
 INSERT INTO `warehouse_test`.`productEntity` (`id`, `name`, `stock`, `price`) VALUES ('6', 'Rasnita cafea', '122', '82.5');
 INSERT INTO `warehouse_test`.`productEntity` (`id`, `name`, `stock`, `price`) VALUES ('7', 'French Press', '222', '132.5');
 
-INSERT INTO `warehouse_test`.`orderEntity` (`id`, `order_number`, `customer_id`) VALUES ('1', '756756', '2');
-INSERT INTO `warehouse_test`.`orderEntity` (`id`, `order_number`, `customer_id`) VALUES ('2', '234234', '1');
-INSERT INTO `warehouse_test`.`orderEntity` (`id`, `order_number`, `customer_id`) VALUES ('3', '23333', '5');
+INSERT INTO `warehouse_test`.`orderEntity` (`id`, `orderNumber`, `customerId`) VALUES ('1', '756756', '2');
+INSERT INTO `warehouse_test`.`orderEntity` (`id`, `orderNumber`, `customerId`) VALUES ('2', '234234', '1');
+INSERT INTO `warehouse_test`.`orderEntity` (`id`, `orderNumber`, `customerId`) VALUES ('3', '23333', '5');
 
 
 

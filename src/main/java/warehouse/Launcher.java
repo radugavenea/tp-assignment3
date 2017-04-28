@@ -3,6 +3,7 @@ package warehouse;
 import connection.ConnectionUrl;
 import dataAccessLayer.OrderDAO;
 import dataAccessLayer.OrderProductDAO;
+import model.OrderProductEntity;
 
 import java.sql.SQLException;
 
@@ -23,6 +24,7 @@ public class Launcher {
         try {
             orderProductDAO.getAll();
 //            orderDAO.addNew(new OrderEntity("cicinela",23));
+            orderProductDAO.addNew(new OrderProductEntity(1,1,1));
         } catch (SQLException e) {
             e.printStackTrace();
         }

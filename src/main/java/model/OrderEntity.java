@@ -6,12 +6,12 @@ package model;
 public class OrderEntity {
 
     private int id;
-    private String order_number;
-    private int customer_id;
+    private String orderNumber;
+    private int customerId;
 
-    public OrderEntity(String order_number, int customer_id) {
-        this.order_number = order_number;
-        this.customer_id = customer_id;
+    public OrderEntity(String orderNumber, int customerId) {
+        this.orderNumber = orderNumber;
+        this.customerId = customerId;
     }
 
     public OrderEntity(){}
@@ -24,19 +24,19 @@ public class OrderEntity {
         this.id = id;
     }
 
-    public String getOrder_number() {
-        return order_number;
+    public String getOrderNumber() {
+        return orderNumber;
     }
 
-    public void setOrder_number(String order_number) {
-        this.order_number = order_number;
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
-    public int getCustomer_id() {
-        return customer_id;
+    public int getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer_id(int customer_id) {
-        this.customer_id = customer_id;
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
     }
 }

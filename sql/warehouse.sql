@@ -47,12 +47,12 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `warehouse`.`orderEntity` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `order_number` VARCHAR(45) NULL,
-  `customer_id` INT NOT NULL,
+  `orderNumber` VARCHAR(45) NULL,
+  `customerId` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_order_customer1_idx` (`customer_id` ASC),
+  INDEX `fk_order_customer1_idx` (`customerId` ASC),
   CONSTRAINT `fk_order_customer1`
-    FOREIGN KEY (`customer_id`)
+    FOREIGN KEY (`customerId`)
     REFERENCES `warehouse`.`customerEntity` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -60,22 +60,22 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `warehouse`.`orderproduct`
+-- Table `warehouse`.`orderProductEntity`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `warehouse`.`orderproduct` (
-  `order_id` INT NOT NULL,
-  `product_id` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `warehouse`.`orderProductEntity` (
+  `orderId` INT NOT NULL,
+  `productId` INT NOT NULL,
   `quantity` INT NULL,
-  PRIMARY KEY (`order_id`, `product_id`),
-  INDEX `fk_order_has_product_product1_idx` (`product_id` ASC),
-  INDEX `fk_order_has_product_order_idx` (`order_id` ASC),
+  PRIMARY KEY (`orderId`, `productId`),
+  INDEX `fk_order_has_product_product1_idx` (`productId` ASC),
+  INDEX `fk_order_has_product_order_idx` (`orderId` ASC),
   CONSTRAINT `fk_order_has_product_order`
-    FOREIGN KEY (`order_id`)
+    FOREIGN KEY (`orderId`)
     REFERENCES `warehouse`.`orderEntity` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_order_has_product_product1`
-    FOREIGN KEY (`product_id`)
+    FOREIGN KEY (`productId`)
     REFERENCES `warehouse`.`productEntity` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
