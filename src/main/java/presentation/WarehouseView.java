@@ -1,7 +1,7 @@
 package presentation;
 
-import model.Customer;
-import model.Product;
+import model.CustomerEntity;
+import model.ProductEntity;
 import presentationGenericUtils.CustomerTableModel;
 import presentationGenericUtils.GenericTableModel;
 import presentationGenericUtils.WarehouseTableModel;
@@ -59,13 +59,13 @@ public class WarehouseView extends JFrame {
 
 
 
-    public void updateCustomerTable(List<Customer> customers){
-        customerTableModel.setDataVector(customers);
+    public void updateCustomerTable(List<CustomerEntity> customerEntities){
+        customerTableModel.setDataVector(customerEntities);
         customerTableModel.fireTableDataChanged();
     }
 
-    public void updateProductTable(List<Product> products){
-        warehouseTableModel.setDataVector(products);
+    public void updateProductTable(List<ProductEntity> productEntities){
+        warehouseTableModel.setDataVector(productEntities);
         warehouseTableModel.fireTableDataChanged();
     }
 

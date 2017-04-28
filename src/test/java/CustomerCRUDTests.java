@@ -1,9 +1,7 @@
 import connection.ConnectionUrl;
 import connection.DbSqlScript;
 import dataAccessLayer.CustomerDAO;
-import dataAccessLayer.ProductDAO;
-import model.Customer;
-import model.Product;
+import model.CustomerEntity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +35,7 @@ public class CustomerCRUDTests {
     @Test
     public void insertCustomerTest() throws SQLException {
         int customerCount = customerDAO.getAll().size();
-        customerDAO.addNew(new Customer("Petunia Mironica","in coltul strazi 35"));
+        customerDAO.addNew(new CustomerEntity("Petunia Mironica","in coltul strazi 35"));
         assert customerDAO.getAll().size() == customerCount + 1;
     }
 
@@ -45,9 +43,9 @@ public class CustomerCRUDTests {
     public void updateCustomerTest() throws SQLException {
         assert customerDAO.getById(1).getName().equals("Mirel Zeama");
 
-        Customer customer = customerDAO.getById(1);
-        customer.setName("Gica");
-        customerDAO.update(customer);
+        CustomerEntity customerEntity = customerDAO.getById(1);
+        customerEntity.setName("Gica");
+        customerDAO.update(customerEntity);
 
         assert !customerDAO.getById(1).getName().equals("Mirel Zeama");
         assert customerDAO.getById(1).getName().equals("Gica");
@@ -56,7 +54,7 @@ public class CustomerCRUDTests {
     @Test
     public void deleteCustomerTest() throws SQLException {
         int customerCount = customerDAO.getAll().size();
-        customerDAO.deleteById(2);
+        customerDAO.deleteById(6);
         assert customerDAO.getAll().size() == customerCount - 1;
     }
 

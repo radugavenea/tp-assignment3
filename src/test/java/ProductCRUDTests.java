@@ -1,7 +1,7 @@
 import connection.ConnectionUrl;
 import connection.DbSqlScript;
 import dataAccessLayer.ProductDAO;
-import model.Product;
+import model.ProductEntity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +36,7 @@ public class ProductCRUDTests {
     @Test
     public void insertProductTest() throws SQLException {
         int productsCount = productDAO.getAll().size();
-        productDAO.addNew(new Product("nume produs",23, new Float(23.4)));
+        productDAO.addNew(new ProductEntity("nume produs",23, new Float(23.4)));
         assert productDAO.getAll().size() == productsCount + 1;
     }
 
@@ -44,9 +44,9 @@ public class ProductCRUDTests {
     public void updateProductTest() throws SQLException {
         assert productDAO.getById(1).getName().equals("Moka Pot");
 
-        Product product = productDAO.getById(1);
-        product.setName("Moka Pot 2");
-        productDAO.update(product);
+        ProductEntity productEntity = productDAO.getById(1);
+        productEntity.setName("Moka Pot 2");
+        productDAO.update(productEntity);
 
         assert productDAO.getById(1).getName().equals("Moka Pot 2");
     }

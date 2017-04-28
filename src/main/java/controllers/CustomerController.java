@@ -2,7 +2,7 @@ package controllers;
 
 import connection.ConnectionUrl;
 import dataAccessLayer.CustomerDAO;
-import model.Customer;
+import model.CustomerEntity;
 import presentation.WarehouseView;
 
 import java.sql.SQLException;
@@ -25,8 +25,8 @@ public class CustomerController {
 
         CustomerDAO customerDAO = new CustomerDAO(ConnectionUrl.warehouseDbUrl);
         try {
-            List<Customer> customers = customerDAO.getAll();
-            view.updateCustomerTable(customers);
+            List<CustomerEntity> customerEntities = customerDAO.getAll();
+            view.updateCustomerTable(customerEntities);
         } catch (SQLException e) {
             e.printStackTrace();
         }

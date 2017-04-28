@@ -4,18 +4,18 @@ package model;
 /**
  * Created by radu on 20.04.2017.
  */
-public class Customer {
+public class CustomerEntity {
 
     private int id;
     private String name;
     private String address;
 
-    public Customer(String name, String address) {
+    public CustomerEntity(String name, String address) {
         this.name = name;
         this.address = address;
     }
 
-    public Customer(){}
+    public CustomerEntity(){}
 
     public int getId() {
         return id;

@@ -5,14 +5,14 @@ import java.beans.PropertyDescriptor;
 /**
  * Created by radu on 20.04.2017.
  */
-public class Product {
+public class ProductEntity {
 
     private int id;
     private String name;
     private int stock;
     private float price;
 
-    public Product(String name, int stock, float price) {
+    public ProductEntity(String name, int stock, float price) {
         this.name = name;
         this.stock = stock;
         this.price = price;
@@ -20,7 +20,7 @@ public class Product {
 
 
 
-    public Product (){}
+    public ProductEntity(){}
 
     public int getId() {
         return id;
