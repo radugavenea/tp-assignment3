@@ -25,7 +25,7 @@ public class QueryStringBuilder<T> {
     }
 
 
-    public String createSelectAllQuery(){
+    protected String createSelectAllQuery(){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("SELECT * FROM ");
         stringBuilder.append(type.getSimpleName());

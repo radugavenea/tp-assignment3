@@ -22,7 +22,7 @@ public class StatementGenerator<T> {
         this.type = type;
     }
 
-    public void prepareInsertStatementAutoIncrement(PreparedStatement statement, T instance){
+    protected void prepareInsertStatementAutoIncrement(PreparedStatement statement, T instance){
         try {
             for (int i=1; i<type.getDeclaredFields().length; i++){
                 Field field = type.getDeclaredFields()[i];
@@ -42,7 +42,7 @@ public class StatementGenerator<T> {
         }
     }
 
-    public void prepareInsertStatementNonAutoIncrement(PreparedStatement statement, T instance){
+    protected void prepareInsertStatementNonAutoIncrement(PreparedStatement statement, T instance){
         try {
             for (int i=0; i<type.getDeclaredFields().length; i++){
                 Field field = type.getDeclaredFields()[i];
@@ -87,7 +87,7 @@ public class StatementGenerator<T> {
 //        }
 //    }
 
-    public void prepareUpdateStatement(PreparedStatement statement, T instance, int primaryKeysLength) throws SQLException {
+    protected void prepareUpdateStatement(PreparedStatement statement, T instance, int primaryKeysLength) throws SQLException {
         int fieldsLength = instance.getClass().getDeclaredFields().length;
         try {
             for(int i=0;  i<fieldsLength - primaryKeysLength; i++){
@@ -134,7 +134,7 @@ public class StatementGenerator<T> {
          }
     }
 
-    public List<T> createObjects(ResultSet resultSet) {
+    protected List<T> createObjects(ResultSet resultSet) {
         List<T> list = new ArrayList<T>();
         try {
             while (resultSet.next()){
