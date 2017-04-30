@@ -3,9 +3,11 @@ package warehouse;
 import connection.ConnectionUrl;
 import dataAccessLayer.OrderDAO;
 import dataAccessLayer.OrderProductDAO;
+import model.OrderEntity;
 import model.OrderProductEntity;
 
 import java.sql.SQLException;
+import java.util.Comparator;
 
 /**
  * Created by radu on 20.04.2017.
@@ -19,16 +21,14 @@ public class Launcher {
 
     public static void main(String[] args) {
 
-        OrderDAO orderDAO = new OrderDAO(ConnectionUrl.testDbUrl);
-        OrderProductDAO orderProductDAO = new OrderProductDAO(ConnectionUrl.testDbUrl);
+        OrderProductDAO orderProductDAO = new OrderProductDAO(ConnectionUrl.warehouseDbUrl);
+        OrderDAO orderDAO = new OrderDAO(ConnectionUrl.warehouseDbUrl);
         try {
-            orderProductDAO.getAll();
-//            orderDAO.addNew(new OrderEntity("cicinela",23));
+            orderDAO.addNew(new OrderEntity("vrvrver",1));
             orderProductDAO.addNew(new OrderProductEntity(1,1,1));
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
 
 //        WarehouseView view = new WarehouseView();
 

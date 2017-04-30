@@ -11,8 +11,6 @@ import java.util.List;
 
 /**
  *
- *          GenericTableModel model = new GenericTableModel(List<T> objects);
- *          JTable table = new JTable(model);
  *
  * Created by radu on 26.04.2017.
  */

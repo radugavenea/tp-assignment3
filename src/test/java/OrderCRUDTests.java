@@ -54,7 +54,7 @@ public class OrderCRUDTests {
     @Test
     public void deleteOrderTest() throws SQLException {
         int orderCount = orderDAO.getAll().size();
-        orderDAO.deleteById(2);
+        orderDAO.deleteById(3);
         assert orderDAO.getAll().size() == orderCount - 1;
     }
 

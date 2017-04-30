@@ -22,15 +22,14 @@ public class StatementGenerator<T> {
         this.type = type;
     }
 
-    public void prepareInsertStatement(PreparedStatement statement, T instance){
-        int index = 1;
+    public void prepareInsertStatementAutoIncrement(PreparedStatement statement, T instance){
         try {
             for (int i=1; i<type.getDeclaredFields().length; i++){
                 Field field = type.getDeclaredFields()[i];
                 PropertyDescriptor propertyDescriptor = new PropertyDescriptor(field.getName(), type);
                 Method method = propertyDescriptor.getReadMethod();
                 Object result = method.invoke(instance);
-                statement.setObject(index++, result);
+                statement.setObject(i, result);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -43,20 +42,68 @@ public class StatementGenerator<T> {
         }
     }
 
-    public void prepareUpdateStatement(PreparedStatement statement, T instance){
+    public void prepareInsertStatementNonAutoIncrement(PreparedStatement statement, T instance){
         try {
-            for(int i=1;  i<instance.getClass().getDeclaredFields().length; i++){
-                Field field = instance.getClass().getDeclaredFields()[i];
+            for (int i=0; i<type.getDeclaredFields().length; i++){
+                Field field = type.getDeclaredFields()[i];
+                PropertyDescriptor propertyDescriptor = new PropertyDescriptor(field.getName(), type);
+                Method method = propertyDescriptor.getReadMethod();
+                Object result = method.invoke(instance);
+                statement.setObject(i+1, result);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (IntrospectionException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
+//    public void prepareUpdateStatement(PreparedStatement statement, T instance){
+//        try {
+//            for(int i=1;  i<instance.getClass().getDeclaredFields().length; i++){
+//                Field field = instance.getClass().getDeclaredFields()[i];
+//                PropertyDescriptor propertyDescriptor = new PropertyDescriptor(field.getName(), type);
+//                Method method = propertyDescriptor.getReadMethod();
+//                Object value = method.invoke(instance);
+//                statement.setObject(i,value);
+//            }
+//            PropertyDescriptor propertyDescriptor = new PropertyDescriptor(instance.getClass().getDeclaredFields()[0].getName(), type);
+//            Method method = propertyDescriptor.getReadMethod();
+//            Object value = method.invoke(instance);
+//            statement.setObject(instance.getClass().getDeclaredFields().length,value);
+//
+//        } catch (IntrospectionException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        } catch (InvocationTargetException e) {
+//            e.printStackTrace();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    public void prepareUpdateStatement(PreparedStatement statement, T instance, int primaryKeysLength) throws SQLException {
+        int fieldsLength = instance.getClass().getDeclaredFields().length;
+        try {
+            for(int i=0;  i<fieldsLength - primaryKeysLength; i++){
+                Field field = instance.getClass().getDeclaredFields()[primaryKeysLength + i];
                 PropertyDescriptor propertyDescriptor = new PropertyDescriptor(field.getName(), type);
                 Method method = propertyDescriptor.getReadMethod();
                 Object value = method.invoke(instance);
-                statement.setObject(i,value);
+                statement.setObject(i+1,value);
             }
-            PropertyDescriptor propertyDescriptor = new PropertyDescriptor(instance.getClass().getDeclaredFields()[0].getName(), type);
-            Method method = propertyDescriptor.getReadMethod();
-            Object value = method.invoke(instance);
-            statement.setObject(instance.getClass().getDeclaredFields().length,value);
-
+            for(int i=fieldsLength - primaryKeysLength;  i<fieldsLength; i++){
+                Field field = instance.getClass().getDeclaredFields()[i - fieldsLength + primaryKeysLength];
+                PropertyDescriptor propertyDescriptor = new PropertyDescriptor(field.getName(), type);
+                Method method = propertyDescriptor.getReadMethod();
+                Object value = method.invoke(instance);
+                statement.setObject(i+1,value);
+            }
         } catch (IntrospectionException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -66,6 +113,25 @@ public class StatementGenerator<T> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+
+    protected void prepareDeleteStatement(PreparedStatement statement, T instance, int primaryKeysLength) throws SQLException {
+         try {
+             for(int i=0;  i<primaryKeysLength; i++){
+                 Field field = instance.getClass().getDeclaredFields()[i];
+                 PropertyDescriptor propertyDescriptor = new PropertyDescriptor(field.getName(), type);
+                 Method method = propertyDescriptor.getReadMethod();
+                 Object value = method.invoke(instance);
+                 statement.setObject(i+1,value);
+             }
+         } catch (IntrospectionException e) {
+            e.printStackTrace();
+         } catch (IllegalAccessException e) {
+             e.printStackTrace();
+         } catch (InvocationTargetException e) {
+             e.printStackTrace();
+         }
     }
 
     public List<T> createObjects(ResultSet resultSet) {

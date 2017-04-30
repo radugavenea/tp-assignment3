@@ -2,11 +2,14 @@ package dataAccessLayerGenericUtils;
 
 import connection.ConnectionFactory;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * It only works where there is a table with one primary key, does not work well on tables with multiple primary keys.
  * Created by radu on 20.04.2017.
  */
 public class GenericDAO<T> {
@@ -14,6 +17,7 @@ public class GenericDAO<T> {
     private final Class<T> type;
     private QueryStringBuilder queryBuilder;
     private StatementGenerator statementGenerator;
+    private PrimaryKeyHelper primaryKeyHelper;
     private String url;
 
 
@@ -21,6 +25,7 @@ public class GenericDAO<T> {
         this.type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         queryBuilder = new QueryStringBuilder(type);
         statementGenerator = new StatementGenerator(type);
+        primaryKeyHelper = new PrimaryKeyHelper(type,connectionUrl);
         url = connectionUrl;
     }
 
@@ -31,7 +36,7 @@ public class GenericDAO<T> {
      * @throws SQLException
      */
     public T getById(int id) throws SQLException {
-        String query = queryBuilder.createSelectByFieldQuery("id");
+        String query = queryBuilder.createSelectByFieldQuery(type.getDeclaredFields()[0].getName());
 
         Connection connection = ConnectionFactory.getConnection(url);
         PreparedStatement statement = connection.prepareStatement(query);
@@ -75,17 +80,12 @@ public class GenericDAO<T> {
      * @throws SQLException
      */
     public int addNew(T instance) throws SQLException {
-        String query = queryBuilder.createInsertQuery();
-
-        Connection connection = ConnectionFactory.getConnection(url);
-        PreparedStatement statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
-
-        statementGenerator.prepareInsertStatement(statement, instance);
-        statement.executeUpdate();
-
-        statement.close();
-        connection.close();
-
+        if(primaryKeyHelper.hasAutoIncrementPrimaryKey()){
+            addNewAutoIncrement(instance);
+        }
+        else {
+            addNewNonAutoIncrement(instance);
+        }
         return 0;
     }
 
@@ -96,12 +96,13 @@ public class GenericDAO<T> {
      * @throws SQLException
      */
     public int update(T instance) throws SQLException {
-        String query = queryBuilder.createUpdateQuery();
+        int numberOfPrimaryKeys = primaryKeyHelper.primaryKeysIndices().size();
+        String query = queryBuilder.createUpdateQuery(numberOfPrimaryKeys);
 
         Connection connection = ConnectionFactory.getConnection(url);
         PreparedStatement statement = connection.prepareStatement(query);
 
-        statementGenerator.prepareUpdateStatement(statement, instance);
+        statementGenerator.prepareUpdateStatement(statement, instance, numberOfPrimaryKeys);
         statement.executeUpdate();
 
         statement.close();
@@ -112,20 +113,75 @@ public class GenericDAO<T> {
 
     /**
      * Deletes a record from db based on id
-     * @param id
      * @return
      * @throws SQLException
      */
-    public int deleteById(int id) throws SQLException {
-        String query = queryBuilder.createDeleteByFieldQuery("id");
+    public int delete(T instance) throws SQLException {
+        int numberOfPrimaryKeys = primaryKeyHelper.primaryKeysIndices().size();
+        String query = queryBuilder.createDeleteByFieldQuery(numberOfPrimaryKeys);
 
         Connection connection = ConnectionFactory.getConnection(url);
         PreparedStatement statement = connection.prepareStatement(query);
-        statement.setInt(1, id);
+        statementGenerator.prepareDeleteStatement(statement, instance, numberOfPrimaryKeys);
         statement.executeUpdate();
         statement.close();
         connection.close();
 
         return 0;
     }
+
+
+    /**
+     * Deletes a record from db based on id
+     * @return
+     * @throws SQLException
+     */
+    public int deleteById(int id) throws SQLException {
+        int numberOfPrimaryKeys = primaryKeyHelper.primaryKeysIndices().size();
+        String query = queryBuilder.createDeleteByFieldQuery(numberOfPrimaryKeys);
+
+        Connection connection = ConnectionFactory.getConnection(url);
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1,id);
+        statement.executeUpdate();
+        statement.close();
+        connection.close();
+
+        return 0;
+    }
+
+
+
+    private int addNewAutoIncrement(T instance) throws SQLException {
+        String query = queryBuilder.createInsertQueryAutoIncrement();
+
+        Connection connection = ConnectionFactory.getConnection(url);
+        PreparedStatement statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+
+        statementGenerator.prepareInsertStatementAutoIncrement(statement, instance);
+        statement.executeUpdate();
+
+        statement.close();
+        connection.close();
+
+        return 0;
+    }
+
+
+    private int addNewNonAutoIncrement(T instance) throws SQLException {
+        String query = queryBuilder.createInsertQueryNonAutoIncrement();
+
+        Connection connection = ConnectionFactory.getConnection(url);
+        PreparedStatement statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+
+        statementGenerator.prepareInsertStatementNonAutoIncrement(statement, instance);
+        statement.executeUpdate();
+
+        statement.close();
+        connection.close();
+
+        return 0;
+    }
+
+
 }

@@ -107,6 +107,9 @@ INSERT INTO `warehouse_test`.`orderEntity` (`id`, `orderNumber`, `customerId`) V
 INSERT INTO `warehouse_test`.`orderEntity` (`id`, `orderNumber`, `customerId`) VALUES ('2', '234234', '1');
 INSERT INTO `warehouse_test`.`orderEntity` (`id`, `orderNumber`, `customerId`) VALUES ('3', '23333', '5');
 
+INSERT INTO `warehouse_test`.`orderProductEntity` (`productId`, `orderId`, `quantity`) VALUES ('1', '1', '1');
+INSERT INTO `warehouse_test`.`orderProductEntity` (`productId`, `orderId`, `quantity`) VALUES ('2', '2', '1');
+
 
 
 

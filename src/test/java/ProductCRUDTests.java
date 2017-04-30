@@ -54,7 +54,7 @@ public class ProductCRUDTests {
     @Test
     public void deleteProductTest() throws SQLException {
         int productsCount = productDAO.getAll().size();
-        productDAO.deleteById(2);
+        productDAO.deleteById(5);
         assert productDAO.getAll().size() == productsCount - 1;
     }
 
