@@ -18,9 +18,15 @@ public class ProductEntity {
         this.price = price;
     }
 
-
+    public ProductEntity(int id, String name, int stock, float price) {
+        this.id = id;
+        this.name = name;
+        this.stock = stock;
+        this.price = price;
+    }
 
     public ProductEntity(){}
+
 
     public int getId() {
         return id;

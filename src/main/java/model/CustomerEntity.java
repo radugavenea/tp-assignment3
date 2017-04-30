@@ -15,6 +15,12 @@ public class CustomerEntity {
         this.address = address;
     }
 
+    public CustomerEntity(int id, String name, String address){
+        this.id = id;
+        this.name = name;
+        this.address = address;
+    }
+
     public CustomerEntity(){}
 
     public int getId() {

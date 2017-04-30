@@ -32,7 +32,7 @@ public class GenericDAO<T> {
     /**
      * Gets entity from db based on id
      * @param id
-     * @return
+     * @return the entity with the specified id
      * @throws SQLException
      */
     public T getById(int id) throws SQLException {
@@ -54,7 +54,7 @@ public class GenericDAO<T> {
 
     /**
      * Gets all the records from db
-     * @return
+     * @return the list of all records
      * @throws SQLException
      */
     public List<T> getAll() throws SQLException {
@@ -76,7 +76,7 @@ public class GenericDAO<T> {
     /**
      * Adds new record to the db
      * @param instance
-     * @return
+     * @return 0 if everything works fine
      * @throws SQLException
      */
     public int addNew(T instance) throws SQLException {
@@ -92,7 +92,7 @@ public class GenericDAO<T> {
     /**
      * Updates record from db
      * @param instance
-     * @return
+     * @return 0 if everything works fine
      * @throws SQLException
      */
     public int update(T instance) throws SQLException {
@@ -113,7 +113,7 @@ public class GenericDAO<T> {
 
     /**
      * Deletes a record from db based on id
-     * @return
+     * @return 0 if everything works fine
      * @throws SQLException
      */
     public int delete(T instance) throws SQLException {
@@ -151,7 +151,12 @@ public class GenericDAO<T> {
     }
 
 
-
+    /**
+     * Add new record based in table with auto-incremented primary key
+     * @param instance
+     * @return 0 if everything works fine
+     * @throws SQLException
+     */
     private int addNewAutoIncrement(T instance) throws SQLException {
         String query = queryBuilder.createInsertQueryAutoIncrement();
 
@@ -167,7 +172,12 @@ public class GenericDAO<T> {
         return 0;
     }
 
-
+    /**
+     * Add new record based in table with no auto-incremented primary key
+     * @param instance
+     * @return 0 if everything works fine
+     * @throws SQLException
+     */
     private int addNewNonAutoIncrement(T instance) throws SQLException {
         String query = queryBuilder.createInsertQueryNonAutoIncrement();
 
