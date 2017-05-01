@@ -1,6 +1,5 @@
 package presentation;
 
-import controllers.OrderController;
 import model.CustomerEntity;
 import model.OrderProductEntity;
 import model.ProductEntity;
@@ -81,6 +80,10 @@ public class WarehouseView extends JFrame {
     private JButton finalizeOrderButton = new JButton("Place order");
     private JButton dismissOrderButton = new JButton("Dismiss order");
 
+    private JPanel reportPanel = new JPanel();
+    private JButton underTenProductsButtonReport = new JButton("Under 10 products in stock Report");
+    private JButton rangePriceProductButtonReport = new JButton("Range between 100 and 200 in price Report");
+
     public WarehouseView() throws HeadlessException {
         initializeWarehouseView();
     }
@@ -97,10 +100,12 @@ public class WarehouseView extends JFrame {
         setUpCustomerTab();
         setUpWarehouseTab();
         setUpOrderPanelTab();
+        setUpReportPanelTab();
 
         customerTabbedPane.add("Customers", customerSplitPane);
         customerTabbedPane.add("Warehouse", warehouseSplitPane);
         customerTabbedPane.add("Basket", orderSplitPane);
+        customerTabbedPane.add("Reports",reportPanel);
 
         frame.add(customerTabbedPane);
         frame.setVisible(true);
@@ -134,6 +139,12 @@ public class WarehouseView extends JFrame {
         finalizeOrderButton.setActionCommand("finalize");
         dismissOrderButton.addActionListener(listener);
         dismissOrderButton.setActionCommand("dismiss");
+    }
+    public void addUnderStockButtonListener(ActionListener listener){
+        underTenProductsButtonReport.addActionListener(listener);
+    }
+    public void addPriceRangeButtonListener(ActionListener listener){
+        rangePriceProductButtonReport.addActionListener(listener);
     }
 
     /**
@@ -309,6 +320,10 @@ public class WarehouseView extends JFrame {
         orderPanel.add(dismissOrderButton);
     }
 
+    private void setUpReportPanelTab(){
+        reportPanel.add(underTenProductsButtonReport);
+        reportPanel.add(rangePriceProductButtonReport);
+    }
 
     private void xButtonListener(ActionListener listener, JButton readButton, JButton addButton, JButton editButton, JButton deleteButton){
         readButton.addActionListener(listener);

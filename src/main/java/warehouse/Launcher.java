@@ -2,6 +2,7 @@ package warehouse;
 
 import controllers.CustomerController;
 import controllers.OrderController;
+import controllers.ReportController;
 import controllers.WarehouseController;
 import presentation.WarehouseView;
 
@@ -23,6 +24,7 @@ public class Launcher {
                 new CustomerController(view);
                 new WarehouseController(view);
                 new OrderController(view);
+                new ReportController(view);
             }
         });
 
