@@ -25,6 +25,8 @@ public class WarehouseController implements Observer {
         this.view = view;
         this.warehouseAdministration = new WarehouseAdministration(new ProductDAO(ConnectionUrl.warehouseDbUrl));
 
+        updateWarehouseTable();
+
         warehouseAdministration.addObserver(this);
 
         view.addProductButtonsListener(new ProductActionListener());
@@ -33,13 +35,16 @@ public class WarehouseController implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+        updateWarehouseTable();
+    }
+
+    private void updateWarehouseTable(){
         try {
             view.updateProductTable(warehouseAdministration.getAllProducts());
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
 
     class ProductActionListener implements ActionListener{
 

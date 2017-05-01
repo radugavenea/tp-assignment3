@@ -25,6 +25,8 @@ public class CustomerController implements Observer {
         this.view = view;
         this.customerAdministration = new CustomerAdministration(new CustomerDAO(ConnectionUrl.warehouseDbUrl));
 
+        updateCustomerTable();
+
         customerAdministration.addObserver(this);
 
         view.addCustomerButtonsListener(new CustomerActionListener());
@@ -33,6 +35,11 @@ public class CustomerController implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+        updateCustomerTable();
+    }
+
+
+    private void updateCustomerTable(){
         try {
             view.updateCustomerTable(customerAdministration.getAllCustomers());
         } catch (SQLException e) {

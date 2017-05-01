@@ -1,5 +1,6 @@
 package presentation;
 
+import controllers.OrderController;
 import model.CustomerEntity;
 import model.OrderProductEntity;
 import model.ProductEntity;
@@ -9,6 +10,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -76,7 +78,6 @@ public class WarehouseView extends JFrame {
     private JPanel orderPanel = new JPanel();
     private JSplitPane orderSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,orderScrollPane,orderPanel);
 
-    private JLabel orderMessageLabel = new JLabel("An order is in progress... In order to place another order please finalize the current one");
     private JButton finalizeOrderButton = new JButton("Place order");
     private JButton dismissOrderButton = new JButton("Dismiss order");
 
@@ -128,6 +129,12 @@ public class WarehouseView extends JFrame {
     public void addToBasketButtonListener(ActionListener listener){
         addProductToBasketButton.addActionListener(listener);
     }
+    public void addPlaceOrderButtonListener(ActionListener listener) {
+        finalizeOrderButton.addActionListener(listener);
+        finalizeOrderButton.setActionCommand("finalize");
+        dismissOrderButton.addActionListener(listener);
+        dismissOrderButton.setActionCommand("dismiss");
+    }
 
     /**
      * Gets customer id from the selected row in the table
@@ -162,6 +169,11 @@ public class WarehouseView extends JFrame {
         orderProductTableModel.fireTableDataChanged();
     }
 
+    public void clearOrderProductTable() {
+        orderProductTableModel.setDataVector(new ArrayList<OrderProductEntity>());
+        orderProductTableModel.fireTableDataChanged();
+    }
+
     public void updateCustomerFields(List<String> customerFields) {
         customerIdInput.setText(customerFields.get(0));
         customerNameInput.setText(customerFields.get(1));
@@ -175,13 +187,28 @@ public class WarehouseView extends JFrame {
         productPriceInput.setText(productFields.get(3));
     }
 
+    /**
+     * Message dialogs methods
+     */
+    public void showDialogNoSessionErrorMessage() {
+        JOptionPane.showMessageDialog(frame, "A customer must be selected and order session must be started in Customer Tab!");
+    }
+    public void showDialogOrderSessionStartedMessage(String orderNumber, String customerId) {
+        JOptionPane.showMessageDialog(frame, "Order session with number " + orderNumber + " for client " + customerId + " started!");
+    }
 
-    public void enableOrderInProgressMessage(){
-        orderMessageLabel.setVisible(true);
+    public void showDialogCustomerNotSelectedErrorMessage() {
+        JOptionPane.showMessageDialog(frame, "A customer must be selected!");
     }
-    public void disableOrderInProgressMessage(){
-        orderMessageLabel.setVisible(false);
+
+    public void showDialogOrderSessionIsActiveMessage() {
+        JOptionPane.showMessageDialog(frame, "A order session is already started! Please finalize the current order.");
     }
+
+    public void showFinalizedOrderMessage() {
+        JOptionPane.showMessageDialog(frame, "Your order has been placed. Bye bye!");
+    }
+
 
     /**
      * Getters and setters
@@ -280,8 +307,6 @@ public class WarehouseView extends JFrame {
         orderSplitPane.setDividerLocation(400);
         orderPanel.add(finalizeOrderButton);
         orderPanel.add(dismissOrderButton);
-        orderPanel.add(orderMessageLabel);
-        orderMessageLabel.setVisible(false);
     }
 
 

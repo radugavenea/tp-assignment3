@@ -32,6 +32,7 @@ public class OrderController implements Observer {
 
         view.addOrderSessionButtonListener(new OrderSessionButtonActionListener());
         view.addToBasketButtonListener(new AddToBasketButtonListener());
+        view.addPlaceOrderButtonListener(new PlaceOrderButtonListener());
     }
 
     @Override
@@ -50,14 +51,24 @@ public class OrderController implements Observer {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            try {
-                OrderSession.orderId = orderProcessing.addNewOrder(Integer.toString(++OrderSession.orderNumber),
-                        Integer.parseInt(view.getSelectedCustomerId()));
-//                OrderSession.orderId = orderProcessing.getOrderByField(Integer.toString(OrderSession.orderNumber)).getInstanceId();
-                OrderSession.customerId = Integer.parseInt(view.getSelectedCustomerId());
-                OrderSession.isActive = true;
-            } catch (SQLException e1) {
-                e1.printStackTrace();
+            if(view.getSelectedCustomerId() != null){
+                if(OrderSession.isActive == false){
+                    try {
+                        OrderSession.orderId = orderProcessing.addNewOrder(Integer.toString(++OrderSession.orderNumber),
+                                Integer.parseInt(view.getSelectedCustomerId()));
+                        OrderSession.customerId = Integer.parseInt(view.getSelectedCustomerId());
+                        OrderSession.isActive = true;
+                        view.showDialogOrderSessionStartedMessage(Integer.toString(OrderSession.orderNumber),Integer.toString(OrderSession.customerId));
+                    } catch (SQLException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                else {
+                    view.showDialogOrderSessionIsActiveMessage();
+                }
+            }
+            else {
+                view.showDialogCustomerNotSelectedErrorMessage();
             }
         }
     }
@@ -73,10 +84,46 @@ public class OrderController implements Observer {
 
                     view.updateOrderProductTable(orderProcessing.getOrderProductsById(OrderSession.orderId));
                 }
+                else{
+                    view.showDialogNoSessionErrorMessage();
+                }
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
 
         }
+    }
+
+    class PlaceOrderButtonListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            switch (e.getActionCommand()){
+                case "finalize":
+                    if(OrderSession.isActive){
+                        closeSession();
+                    }
+                    else {
+                        view.showDialogNoSessionErrorMessage();
+                    }
+                    break;
+                case "dismiss":
+                    if(OrderSession.isActive){
+                        closeSession();
+                    }
+                    else{
+                        view.showDialogNoSessionErrorMessage();
+                    }
+                    break;
+            }
+        }
+    }
+
+    private void closeSession(){
+        OrderSession.isActive = false;
+        OrderSession.customerId = -1;
+        OrderSession.orderId = -1;
+        view.clearOrderProductTable();
+        view.showFinalizedOrderMessage();
     }
 }
