@@ -1,4 +1,4 @@
-package presentationGenericUtils;
+package presentationTableUtils;
 
 import javax.swing.table.DefaultTableModel;
 import java.beans.IntrospectionException;

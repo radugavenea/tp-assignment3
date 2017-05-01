@@ -1,4 +1,4 @@
-package presentationGenericUtils;
+package presentationTableUtils;
 
 import model.ProductEntity;
 

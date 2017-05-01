@@ -3,7 +3,7 @@ package presentation;
 import model.CustomerEntity;
 import model.OrderProductEntity;
 import model.ProductEntity;
-import presentationGenericUtils.*;
+import presentationTableUtils.*;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
