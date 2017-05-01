@@ -2,7 +2,11 @@ package dataAccessLayerGenericUtils;
 
 import connection.ConnectionFactory;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -121,5 +125,27 @@ public class PrimaryKeyHelper<T> {
         connection.close();
 
         return isPrimaryKey;
+    }
+
+    /**
+     * Gets the id of the corresponding record for the instance
+     * @param instance
+     * @param <T>
+     * @return  id of instance
+     */
+    protected <T> int getInstanceId(T instance) {
+        Object result = null;
+        try {
+            PropertyDescriptor propertyDescriptor = new PropertyDescriptor(type.getDeclaredFields()[0].getName(),type);
+            Method method = propertyDescriptor.getReadMethod();
+            result = method.invoke(instance);
+        } catch (IntrospectionException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return result == null ? -1 : (Integer) result;
     }
 }

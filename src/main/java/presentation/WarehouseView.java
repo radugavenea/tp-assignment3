@@ -1,16 +1,14 @@
 package presentation;
 
 import model.CustomerEntity;
+import model.OrderProductEntity;
 import model.ProductEntity;
-import presentationGenericUtils.CustomerTableModel;
-import presentationGenericUtils.GenericTableModel;
-import presentationGenericUtils.WarehouseTableModel;
+import presentationGenericUtils.*;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +26,9 @@ public class WarehouseView extends JFrame {
     private JScrollPane customerScrollPane = new JScrollPane(customerTable);
     private JPanel customerPanel = makeTextPanel();
     private JPanel customerButtonPanel = new JPanel();
-    private JSplitPane customerInsideSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, customerPanel, customerButtonPanel);
+    private JPanel customerOrderPanel = new JPanel();
+    private JSplitPane customerInsideInsideSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, customerButtonPanel, customerOrderPanel);
+    private JSplitPane customerInsideSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, customerPanel, customerInsideInsideSplitPane);
     private JSplitPane customerSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, customerScrollPane, customerInsideSplitPane);
 
     private JLabel customerIdLabel = new JLabel("Customer id: ");
@@ -37,18 +37,20 @@ public class WarehouseView extends JFrame {
     private JTextField customerNameInput = new JTextField(30);
     private JTextField customerAddressInput = new JTextField(30);
     private JTextField customerIdInput = new JTextField(30);
-
     private JButton readCustomerButton = new JButton("Read");
     private JButton addCustomerButton = new JButton("Add");
     private JButton editCustomerButton = new JButton("Edit");
     private JButton deleteCustomerButton = new JButton("Delete");
+    private JButton startOrderSessionButton = new JButton("Start order session for client");
 
     private GenericTableModel warehouseTableModel = new WarehouseTableModel();
     private JTable warehouseTable = new JTable();
     private JScrollPane warehouseScrollPane = new JScrollPane(warehouseTable);
     private JPanel warehousePanel = makeTextPanel();
     private JPanel warehouseButtonPanel = new JPanel();
-    private JSplitPane warehouseInsideSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,warehousePanel,warehouseButtonPanel);
+    private JPanel warehouseOrderPanel = new JPanel();
+    private JSplitPane warehouseInsideInsideSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,warehouseButtonPanel,warehouseOrderPanel);
+    private JSplitPane warehouseInsideSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,warehousePanel,warehouseInsideInsideSplitPane);
     private JSplitPane warehouseSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,warehouseScrollPane,warehouseInsideSplitPane);
 
     private JLabel productIdLabel = new JLabel("Product id: ");
@@ -59,13 +61,24 @@ public class WarehouseView extends JFrame {
     private JTextField productNameInput = new JTextField(30);
     private JTextField productStockInput = new JTextField(30);
     private JTextField productPriceInput = new JTextField(30);
-
     private JButton readProductButton = new JButton("Read");
     private JButton addProductButton = new JButton("Add");
     private JButton editProductButton = new JButton("Edit");
     private JButton deleteProductButton = new JButton("Delete");
 
+    private JLabel productQuantityLabel = new JLabel("Quantity: ");
+    private JTextField productQuantityInput = new JTextField(10);
+    private JButton addProductToBasketButton = new JButton("Add to basket");
 
+    private GenericTableModel orderProductTableModel = new OrderProductTableModel();
+    private JTable orderProductTable = new JTable();
+    private JScrollPane orderScrollPane = new JScrollPane(orderProductTable);
+    private JPanel orderPanel = new JPanel();
+    private JSplitPane orderSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,orderScrollPane,orderPanel);
+
+    private JLabel orderMessageLabel = new JLabel("An order is in progress... In order to place another order please finalize the current one");
+    private JButton finalizeOrderButton = new JButton("Place order");
+    private JButton dismissOrderButton = new JButton("Dismiss order");
 
     public WarehouseView() throws HeadlessException {
         initializeWarehouseView();
@@ -80,11 +93,13 @@ public class WarehouseView extends JFrame {
         frame.setLocation((dim.width-frame.getWidth())/2, (dim.height-frame.getHeight())/2);
         frame.setResizable(false);
 
-        setUpCustomerPanel();
-        setUpWarehousePanel();
+        setUpCustomerTab();
+        setUpWarehouseTab();
+        setUpOrderPanelTab();
 
         customerTabbedPane.add("Customers", customerSplitPane);
         customerTabbedPane.add("Warehouse", warehouseSplitPane);
+        customerTabbedPane.add("Basket", orderSplitPane);
 
         frame.add(customerTabbedPane);
         frame.setVisible(true);
@@ -107,7 +122,12 @@ public class WarehouseView extends JFrame {
     public void addProductTableListener(ListSelectionListener listSelectionListener){
         warehouseTable.getSelectionModel().addListSelectionListener(listSelectionListener);
     }
-
+    public void addOrderSessionButtonListener(ActionListener listener){
+        startOrderSessionButton.addActionListener(listener);
+    }
+    public void addToBasketButtonListener(ActionListener listener){
+        addProductToBasketButton.addActionListener(listener);
+    }
 
     /**
      * Gets customer id from the selected row in the table
@@ -137,6 +157,11 @@ public class WarehouseView extends JFrame {
         warehouseTableModel.fireTableDataChanged();
     }
 
+    public void updateOrderProductTable(List<OrderProductEntity> orderProductEntities) {
+        orderProductTableModel.setDataVector(orderProductEntities);
+        orderProductTableModel.fireTableDataChanged();
+    }
+
     public void updateCustomerFields(List<String> customerFields) {
         customerIdInput.setText(customerFields.get(0));
         customerNameInput.setText(customerFields.get(1));
@@ -150,6 +175,13 @@ public class WarehouseView extends JFrame {
         productPriceInput.setText(productFields.get(3));
     }
 
+
+    public void enableOrderInProgressMessage(){
+        orderMessageLabel.setVisible(true);
+    }
+    public void disableOrderInProgressMessage(){
+        orderMessageLabel.setVisible(false);
+    }
 
     /**
      * Getters and setters
@@ -197,9 +229,15 @@ public class WarehouseView extends JFrame {
     public void setProductPriceInput(String productPrice){
         productPriceInput.setText(productPrice);
     }
+    public String getProductQuantityInput(){
+        return productQuantityInput.getText();
+    }
+    public void setProductQuantityInput(String productQuantity){
+        productQuantityInput.setText(productQuantity);
+    }
 
 
-    private void setUpCustomerPanel(){
+    private void setUpCustomerTab(){
         customerTable.setModel(customerTableModel);
         customerSplitPane.setDividerLocation(300);
         customerIdInput.setEditable(false);
@@ -213,9 +251,10 @@ public class WarehouseView extends JFrame {
         customerButtonPanel.add(addCustomerButton);
         customerButtonPanel.add(editCustomerButton);
         customerButtonPanel.add(deleteCustomerButton);
+        customerOrderPanel.add(startOrderSessionButton);
     }
 
-    private void setUpWarehousePanel(){
+    private void setUpWarehouseTab(){
         warehouseTable.setModel(warehouseTableModel);
         warehouseSplitPane.setDividerLocation(300);
         productIdInput.setEditable(false);
@@ -231,6 +270,18 @@ public class WarehouseView extends JFrame {
         warehouseButtonPanel.add(addProductButton);
         warehouseButtonPanel.add(editProductButton);
         warehouseButtonPanel.add(deleteProductButton);
+        warehouseOrderPanel.add(productQuantityLabel);
+        warehouseOrderPanel.add(productQuantityInput);
+        warehouseOrderPanel.add(addProductToBasketButton);
+    }
+
+    private void setUpOrderPanelTab(){
+        orderProductTable.setModel(orderProductTableModel);
+        orderSplitPane.setDividerLocation(400);
+        orderPanel.add(finalizeOrderButton);
+        orderPanel.add(dismissOrderButton);
+        orderPanel.add(orderMessageLabel);
+        orderMessageLabel.setVisible(false);
     }
 
 

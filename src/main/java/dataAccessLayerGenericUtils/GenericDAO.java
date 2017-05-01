@@ -2,10 +2,8 @@ package dataAccessLayerGenericUtils;
 
 import connection.ConnectionFactory;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,6 +51,30 @@ public class GenericDAO<T> {
     }
 
     /**
+     * Gets entity from db based on id
+     * @param id
+     * @return the entity with the specified id
+     * @throws SQLException
+     */
+    public List<T> getAllById(int id) throws SQLException {
+        String query = queryBuilder.createSelectByFieldQuery(type.getDeclaredFields()[0].getName());
+
+        Connection connection = ConnectionFactory.getConnection(url);
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, id);
+        ResultSet resultSet = statement.executeQuery();
+
+        List<T> list = statementGenerator.createObjects(resultSet);
+
+        resultSet.close();
+        statement.close();
+        connection.close();
+
+        return list;
+    }
+
+
+    /**
      * Gets all the records from db
      * @return the list of all records
      * @throws SQLException
@@ -76,23 +98,22 @@ public class GenericDAO<T> {
     /**
      * Adds new record to the db
      * @param instance
-     * @return 0 if everything works fine
+     * @return id of the new added record if single primary key, 0 otherwise
      * @throws SQLException
      */
     public int addNew(T instance) throws SQLException {
         if(primaryKeyHelper.hasAutoIncrementPrimaryKey()){
-            addNewAutoIncrement(instance);
+            return addNewAutoIncrement(instance);
         }
         else {
-            addNewNonAutoIncrement(instance);
+            return addNewNonAutoIncrement(instance);
         }
-        return 0;
     }
 
     /**
      * Updates record from db
      * @param instance
-     * @return 0 if everything works fine
+     * @return id of the record to be edited
      * @throws SQLException
      */
     public int update(T instance) throws SQLException {
@@ -108,12 +129,12 @@ public class GenericDAO<T> {
         statement.close();
         connection.close();
 
-        return 0;
+        return primaryKeyHelper.getInstanceId(instance);
     }
 
     /**
      * Deletes a record from db based on id
-     * @return 0 if everything works fine
+     * @return id if everything works fine
      * @throws SQLException
      */
     public int delete(T instance) throws SQLException {
@@ -124,16 +145,17 @@ public class GenericDAO<T> {
         PreparedStatement statement = connection.prepareStatement(query);
         statementGenerator.prepareDeleteStatement(statement, instance, numberOfPrimaryKeys);
         statement.executeUpdate();
+
         statement.close();
         connection.close();
 
-        return 0;
+        return primaryKeyHelper.getInstanceId(instance);
     }
 
 
     /**
      * Deletes a record from db based on id
-     * @return
+     * @return id of the deleted record
      * @throws SQLException
      */
     public int deleteById(int id) throws SQLException {
@@ -147,7 +169,7 @@ public class GenericDAO<T> {
         statement.close();
         connection.close();
 
-        return 0;
+        return id;
     }
 
 
@@ -158,6 +180,7 @@ public class GenericDAO<T> {
      * @throws SQLException
      */
     private int addNewAutoIncrement(T instance) throws SQLException {
+        int id;
         String query = queryBuilder.createInsertQueryAutoIncrement();
 
         Connection connection = ConnectionFactory.getConnection(url);
@@ -166,10 +189,15 @@ public class GenericDAO<T> {
         statementGenerator.prepareInsertStatementAutoIncrement(statement, instance);
         statement.executeUpdate();
 
+        ResultSet resultSet = statement.getGeneratedKeys();
+        resultSet.next();
+        id = resultSet.getInt(1);
+
+        resultSet.close();
         statement.close();
         connection.close();
 
-        return 0;
+        return id;
     }
 
     /**
