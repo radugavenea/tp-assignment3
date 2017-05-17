@@ -7,7 +7,6 @@ import java.sql.*;
 import java.util.List;
 
 /**
- * It only works where there is a table with one primary key, does not work well on tables with multiple primary keys.
  * Created by radu on 20.04.2017.
  */
 public class GenericDAO<T> {
